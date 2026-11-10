@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>비트 시그널 현황</title>
 <style>
 :root{--bg:#fafaf9;--card:#fff;--ink:#1c1917;--mute:#78716c;--line:#e7e5e4;--up:#0f766e;--down:#b91c1c;
---accent:#1d4ed8;--chip:#f5f5f4;--warn:#b45309}
+--accent:#1d4ed8;--chip:#f5f5f4;--warn:#b45309;--tvup:#089981;--tvdn:#f23645;--tvmix:#ff9800}
 @media (prefers-color-scheme:dark){:root{--bg:#171717;--card:#212121;--ink:#f5f5f4;--mute:#a8a29e;
 --line:#3a3a3a;--up:#2dd4bf;--down:#f87171;--accent:#60a5fa;--chip:#2c2c2c;--warn:#fbbf24}}
 *{box-sizing:border-box}
@@ -19,8 +19,11 @@ h1{font-size:20px;margin:0}h2{font-size:15px;margin:26px 0 10px}
 .up{color:var(--up)}.down{color:var(--down)}.warn{color:var(--warn)}
 .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .chip{border:1px solid var(--line);background:var(--chip);border-radius:99px;padding:3px 11px;font-size:13px}
-.chip.ok,.chip.bull{border-color:var(--up);color:var(--up)}
-.chip.bear{border-color:var(--down);color:var(--down)}
+.chip.ok{border-color:var(--up);color:var(--up)}
+.chip.bull,.chip.vup{border-color:var(--tvup);color:var(--tvup)}
+.chip.bear,.chip.vdn{border-color:var(--tvdn);color:var(--tvdn)}
+.chip.mix{border-color:var(--tvmix);color:var(--tvmix)}
+.tvup{color:var(--tvup)}.tvdn{color:var(--tvdn)}
 .bar{height:6px;background:var(--chip);border-radius:99px;overflow:hidden;min-width:60px}
 .bar i{display:block;height:100%;background:var(--accent)}.bar.big{height:10px;margin:8px 0 2px}
 .sgrp{display:flex;justify-content:space-between;margin-top:14px;padding-bottom:4px;border-bottom:1px solid var(--line)}
@@ -74,7 +77,7 @@ svg .line{fill:none;stroke:var(--accent);stroke-width:2}svg text{fill:var(--mute
 <p class="foot pubonly">본 페이지는 참고용 정보이며 투자 권유가 아닙니다. 표시된 성과는 시그널이 발생한 시점의 가격을 기준으로 계산한 가상 결과로, 수수료·슬리피지·실제 체결 차이가 반영되어 있지 않습니다. 과거 성과가 미래 수익을 보장하지 않으며, 투자 판단과 그에 따른 결과의 책임은 본인에게 있습니다.</p>
 </main>
 <script>
-const API="/api/public",PUBLIC=true,REFRESH_MS=10000,STATIC_DATA={"generated": "2026-11-10T10:44:19.459744+00:00", "symbol": "BTC/USDT", "exchange": "binance", "price": {"price": 74240.43, "pct24": 0.148, "high": 75568.18, "low": 74058.7, "volume": 892140065.8561735, "error": null}, "hold_hours": 8, "min_score": 60, "signals": [], "scan": {"coins": []}, "leaderboard": {"summary": {"n": 0, "win_rate": 0.0, "total": 0, "avg": 0.0, "avg_win": 0.0, "avg_loss": 0.0, "pf": null, "best": 0.0, "worst": 0.0, "mdd": 0.0, "sl_count": 0, "avg_hours": 0.0, "curve": []}, "ranked": [], "stages": [], "open": []}};   // STATIC_DATA: 서버 없는 스냅샷 페이지일 때만 값이 있음
+const API="/api/public",PUBLIC=true,REFRESH_MS=10000,STATIC_DATA={"generated": "2026-11-10T10:52:37.842522+00:00", "symbol": "BTC/USDT", "exchange": "binance", "price": {"price": 74262.77, "pct24": 0.115, "high": 75568.18, "low": 74058.7, "volume": 895255333.6538996, "error": null}, "hold_hours": 8, "min_score": 60, "signals": [], "scan": {"coins": []}, "leaderboard": {"summary": {"n": 0, "win_rate": 0.0, "total": 0, "avg": 0.0, "avg_win": 0.0, "avg_loss": 0.0, "pf": null, "best": 0.0, "worst": 0.0, "mdd": 0.0, "sl_count": 0, "avg_hours": 0.0, "curve": []}, "ranked": [], "stages": [], "open": []}};   // STATIC_DATA: 서버 없는 스냅샷 페이지일 때만 값이 있음
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cls=v=>v>0?"up":(v<0?"down":"");
@@ -89,13 +92,14 @@ function renderPrice(p){
   $("chg").className="chg "+cls(p.pct24);$("chg").textContent="24h "+pct(p.pct24);
   $("hl").textContent="24h 고가 "+num(p.high)+" · 저가 "+num(p.low)+(p.error?" · 시세 갱신 실패(직전 값 표시)":"");
 }
+function chipDir(label,ok,bull){return '<span class="chip '+(bull?"vup":"vdn")+'">'+esc(label)+" "+(ok?"O":"X")+"</span>";}   // 거래량: 양봉이면 녹색, 음봉이면 빨강
 function chip(label,ok){return '<span class="chip '+(ok?"ok":"")+'">'+esc(label)+" "+(ok?"O":"X")+"</span>";}
 function renderBot(b){
   if(!b){$("bot").innerHTML='<div class="empty">봇이 아직 상태를 기록하지 않았습니다. btc_alert_bot.py가 실행 중인지 확인하세요.</div>';return;}
   const stale=b.age_sec>90;
   let h='<div class="meta '+(stale?"warn":"")+'">마지막 갱신 '+b.age_sec+"초 전"+(stale?" — 봇이 멈춘 것 같습니다":"")+
     " · "+esc(b.symbol)+" "+esc(b.timeframe)+" 직전 마감봉 기준</div><div class='row'>"+
-    chip("거래량 "+b.vol_ratio+"배 (기준 "+b.vol_mult+"배)",b.vol_ratio>=b.vol_mult)+
+    chipDir("거래량 "+b.vol_ratio+"배 (기준 "+b.vol_mult+"배)",b.vol_ratio>=b.vol_mult,b.bull)+
     chip("양봉",b.bull)+chip("EMA"+b.ema_len+" 위",b.above_ema)+"</div>";
   h+="<div class='row'><span class='chip'>차수 "+b.stage+"/"+b.stages+"</span>";
   if(b.avg_price!=null){
@@ -114,7 +118,7 @@ function renderScan(sc){
     const all=c.vol_ratio>=2&&c.bull&&c.above_ema;   // 기본 조건 3가지 모두 충족
     const la=c.last_alert?new Date(c.last_alert).toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"-";
     return "<tr><td><b>"+esc(c.symbol.split("/")[0])+"</b>"+(c.is_main?" <span class='vals'>(매매)</span>":"")+"</td><td>"+fmtP(c.price)+
-      "</td><td><b>"+c.score+"</b></td><td>"+c.vol_ratio.toFixed(1)+"배 "+ox(c.vol_ratio>=2)+"</td><td>"+ox(c.bull)+"</td><td>"+ox(c.above_ema)+
+      "</td><td><b>"+c.score+"</b></td><td class='"+(c.bull?"tvup":"tvdn")+"'>"+c.vol_ratio.toFixed(1)+"배 "+(c.vol_ratio>=2?"O":"X")+"</td><td>"+ox(c.bull)+"</td><td>"+ox(c.above_ema)+
       "</td><td>"+c.aligned_count+"/"+c.tf_total+"</td><td>"+(all?"<b class='up'>조건 충족</b>":"-")+"</td><td>"+esc(la)+"</td></tr>";
   }).join("");
   $("scan").innerHTML=(stale?'<div class="meta warn" style="padding:4px 10px">마지막 갱신 '+sc.age_sec+"초 전 — 봇이 멈춘 것 같습니다</div>":"")+
@@ -129,7 +133,7 @@ function renderScore(b){
   Object.keys(groups).forEach(g=>{
     const it=groups[g],got=it.reduce((a,x)=>a+x.score,0),mx=it.reduce((a,x)=>a+x.max,0);
     h+='<div class="sgrp"><b>'+esc(g)+'</b><span class="vals">'+got.toFixed(1)+" / "+mx+"</span></div>"+
-      it.map(x=>'<div class="srow"><span>'+esc(x.name)+'</span><div class="bar"><i style="width:'+(x.max?x.score/x.max*100:0)+
+      it.map(x=>'<div class="srow"><span>'+esc(x.name)+'</span><div class="bar"><i style="width:'+(x.max?Math.max(0,x.score)/x.max*100:0)+
       '%"></i></div><span class="vals">'+x.score+" / "+x.max+" · "+esc(x.detail)+"</span></div>").join("");
   });
   $("score").innerHTML=h;
@@ -139,11 +143,11 @@ function renderAlign(b){
   const a=b&&b.ema_align;
   if(!a){$("align").innerHTML='<div class="empty">봇이 이평선 배열을 기록하면 표시됩니다.</div>';return;}
   $("align").innerHTML=Object.keys(TFN).filter(k=>a[k]).map(k=>{
-    const x=a[k],c=x.state==="정배열"?"bull":(x.state==="역배열"?"bear":"");
+    const x=a[k],c=x.state==="정배열"?"bull":(x.state==="역배열"?"bear":(x.state==="혼조"?"mix":""));
     const vals=x.values.length?x.lengths.map((n,i)=>"EMA"+n+" "+num(x.values[i],0)).join("  ›  "):"";
     let vol="";
     if(x.vol_streak!=null){
-      vol='<span class="chip '+(x.vol_streak>0?"ok":"")+'">거래량 연속↑ '+x.vol_streak+"회</span>"+
+      vol='<span class="chip '+(x.vol_streak>0?(x.vol_dir==="down"?"vdn":(x.vol_dir==="up"?"vup":"ok")):"")+'">거래량 연속↑ '+x.vol_streak+"회</span>"+
         (x.vol_change!=null?'<span class="vals">직전봉 '+pct(x.vol_change,0)+"</span>":"");
     }
     return '<div class="arow"><b>'+TFN[k]+'</b><span class="chip '+c+'">'+esc(x.state)+"</span>"+vol+'<span class="vals">'+esc(vals)+"</span></div>";
