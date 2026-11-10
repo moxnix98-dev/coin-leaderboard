@@ -1,0 +1,264 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>비트 시그널 현황</title>
+<style>
+:root{--bg:#fafaf9;--card:#fff;--ink:#1c1917;--mute:#78716c;--line:#e7e5e4;--up:#0f766e;--down:#b91c1c;
+--accent:#1d4ed8;--chip:#f5f5f4;--warn:#b45309}
+@media (prefers-color-scheme:dark){:root{--bg:#171717;--card:#212121;--ink:#f5f5f4;--mute:#a8a29e;
+--line:#3a3a3a;--up:#2dd4bf;--down:#f87171;--accent:#60a5fa;--chip:#2c2c2c;--warn:#fbbf24}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,"Apple SD Gothic Neo",
+"Noto Sans KR","Malgun Gothic",sans-serif;padding:20px 16px 48px}
+main{max-width:920px;margin:0 auto}
+h1{font-size:20px;margin:0}h2{font-size:15px;margin:26px 0 10px}
+.sub{color:var(--mute);font-size:13px;margin:2px 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.hero{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+.price{font-size:40px;font-weight:700;font-variant-numeric:tabular-nums;transition:color .3s}
+.chg{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.meta{color:var(--mute);font-size:13px;margin-top:4px}
+.up{color:var(--up)}.down{color:var(--down)}.warn{color:var(--warn)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{border:1px solid var(--line);background:var(--chip);border-radius:99px;padding:3px 11px;font-size:13px}
+.chip.ok,.chip.bull{border-color:var(--up);color:var(--up)}
+.chip.bear{border-color:var(--down);color:var(--down)}
+.bar{height:6px;background:var(--chip);border-radius:99px;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--accent)}.bar.big{height:10px;margin:8px 0 2px}
+.sgrp{display:flex;justify-content:space-between;margin-top:14px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.srow{display:grid;grid-template-columns:84px 1fr minmax(130px,auto);gap:10px;align-items:center;padding:5px 0}
+.srow .vals{text-align:right}
+.arow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.arow:last-child{border-bottom:0}.arow b{min-width:64px}.arow .vals{color:var(--mute);font-size:12px;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.tile b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.tile span{color:var(--mute);font-size:12px}
+.feed{list-style:none;margin:0;padding:0;max-height:280px;overflow:auto}
+.feed li{padding:8px 0;border-bottom:1px solid var(--line);white-space:pre-line}
+.feed li:last-child{border-bottom:0}.feed time{display:block;color:var(--mute);font-size:12px}
+.tbl{overflow-x:auto;padding:4px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{color:var(--mute);font-weight:500;font-size:12px}tr:last-child td{border-bottom:0}
+th:first-child,td:first-child{text-align:left}.rank{font-weight:600;color:var(--accent)}
+.empty{color:var(--mute);padding:10px 0}
+.tgwarn{margin-top:14px;border:1px solid var(--down);color:var(--down);border-radius:10px;padding:10px 14px;font-size:14px}
+.tgwarn small{display:block;color:var(--mute);margin-top:2px}
+.nosend{color:var(--down);font-size:12px;margin-left:6px}
+.sighead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px}
+.ctl{font-size:13px;color:var(--mute)}
+.ctl input{width:64px;padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
+#sigmeta{margin:-4px 0 8px}
+body.public .private{display:none}body:not(.public) .pubonly{display:none}
+.foot{margin-top:28px;color:var(--mute);font-size:12px;line-height:1.6}
+svg{width:100%;height:auto;display:block}svg .zero{stroke:var(--line);stroke-dasharray:4 4}
+svg .line{fill:none;stroke:var(--accent);stroke-width:2}svg text{fill:var(--mute);font-size:11px}
+</style></head><body class="public"><main>
+<h1>비트 시그널 현황</h1><p class="sub" id="sub">불러오는 중…</p>
+<div class="card"><div class="hero"><span class="price" id="price">-</span><span class="chg" id="chg"></span></div>
+<div class="meta" id="hl"></div></div>
+
+<div class="private"><div id="tgwarn"></div>
+<h2>종합 점수 (100점 만점)</h2><div class="card" id="score"><div class="empty">불러오는 중…</div></div>
+<h2>봇 상태</h2><div class="card" id="bot"><div class="empty">불러오는 중…</div></div>
+<h2>코인 스캔 (점수 높은 순)</h2><div class="card tbl" id="scan"><div class="empty">불러오는 중…</div></div>
+<h2>이평선 배열 (EMA) · 거래량 연속 상승</h2><div class="card" id="align"><div class="empty">불러오는 중…</div></div></div>
+<div class="sighead"><h2>매수 시그널 종목</h2>
+<label class="ctl private">최소 점수 <input id="minScore" type="number" min="0" max="100" step="5" value="60"> 점 이상</label></div>
+<div class="meta" id="sigmeta"></div>
+<div class="card tbl" id="sigs"><div class="empty">불러오는 중…</div></div>
+<div class="private"><h2>시그널 알림</h2><div class="card"><ul class="feed" id="alerts"></ul></div></div>
+<h2>리더보드</h2><div class="grid" id="tiles"></div>
+<h2 style="margin-top:18px">누적 실현손익</h2><div class="card" id="curve"></div>
+<h2>사이클 순위 (실현손익 높은 순)</h2><div class="card tbl" id="board"></div>
+<div class="private"><h2>진행 중인 사이클</h2><div class="card tbl" id="open"></div></div>
+<p class="foot pubonly">본 페이지는 참고용 정보이며 투자 권유가 아닙니다. 표시된 성과는 시그널이 발생한 시점의 가격을 기준으로 계산한 가상 결과로, 수수료·슬리피지·실제 체결 차이가 반영되어 있지 않습니다. 과거 성과가 미래 수익을 보장하지 않으며, 투자 판단과 그에 따른 결과의 책임은 본인에게 있습니다.</p>
+</main>
+<script>
+const API="/api/public",PUBLIC=true,REFRESH_MS=10000,STATIC_DATA={"generated": "2026-11-10T08:45:51.202316+00:00", "symbol": "BTC/USDT", "exchange": "binance", "price": {"price": 74564.54, "pct24": 0.375, "high": 75568.18, "low": 74058.45, "volume": 890988514.7160532, "error": null}, "hold_hours": 8, "min_score": 60, "signals": [], "scan": {"coins": []}, "leaderboard": {"summary": {"n": 0, "win_rate": 0.0, "total": 0, "avg": 0.0, "avg_win": 0.0, "avg_loss": 0.0, "pf": null, "best": 0.0, "worst": 0.0, "mdd": 0.0, "sl_count": 0, "avg_hours": 0.0, "curve": []}, "ranked": [], "stages": [], "open": []}};   // STATIC_DATA: 서버 없는 스냅샷 페이지일 때만 값이 있음
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cls=v=>v>0?"up":(v<0?"down":"");
+const num=(v,d=2)=>v==null?"-":Number(v).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(v,d=2)=>v==null?"-":(v>0?"+":"")+Number(v).toFixed(d)+"%";
+let lastPrice=null;
+function renderPrice(p){
+  if(!p||p.price==null){$("price").textContent="-";$("hl").textContent=p&&p.error?"시세 조회 실패: "+p.error:"";return;}
+  const el=$("price");el.textContent=num(p.price);
+  if(lastPrice!=null&&p.price!==lastPrice){el.className="price "+(p.price>lastPrice?"up":"down");}
+  lastPrice=p.price;
+  $("chg").className="chg "+cls(p.pct24);$("chg").textContent="24h "+pct(p.pct24);
+  $("hl").textContent="24h 고가 "+num(p.high)+" · 저가 "+num(p.low)+(p.error?" · 시세 갱신 실패(직전 값 표시)":"");
+}
+function chip(label,ok){return '<span class="chip '+(ok?"ok":"")+'">'+esc(label)+" "+(ok?"O":"X")+"</span>";}
+function renderBot(b){
+  if(!b){$("bot").innerHTML='<div class="empty">봇이 아직 상태를 기록하지 않았습니다. btc_alert_bot.py가 실행 중인지 확인하세요.</div>';return;}
+  const stale=b.age_sec>90;
+  let h='<div class="meta '+(stale?"warn":"")+'">마지막 갱신 '+b.age_sec+"초 전"+(stale?" — 봇이 멈춘 것 같습니다":"")+
+    " · "+esc(b.symbol)+" "+esc(b.timeframe)+" 직전 마감봉 기준</div><div class='row'>"+
+    chip("거래량 "+b.vol_ratio+"배 (기준 "+b.vol_mult+"배)",b.vol_ratio>=b.vol_mult)+
+    chip("양봉",b.bull)+chip("EMA"+b.ema_len+" 위",b.above_ema)+"</div>";
+  h+="<div class='row'><span class='chip'>차수 "+b.stage+"/"+b.stages+"</span>";
+  if(b.avg_price!=null){
+    h+="<span class='chip'>평단 "+num(b.avg_price)+"</span><span class='chip "+cls(b.pnl_pct)+"'>평단 대비 "+pct(b.pnl_pct)+"</span>"+
+      "<span class='chip'>익절 "+b.tp_done+"회</span>";
+    if(b.sl_price!=null)h+="<span class='chip'>손절기준 "+num(b.sl_price)+"</span>";
+  }else h+="<span class='chip'>포지션 없음</span>";
+  $("bot").innerHTML=h+"</div>";
+}
+const fmtP=p=>p==null?"-":(p>=100?num(p,2):(p>=1?num(p,4):num(p,6)));
+function renderScan(sc){
+  if(!sc||!sc.coins||!sc.coins.length){$("scan").innerHTML='<div class="empty">봇이 코인 현황을 기록하면 표시됩니다.</div>';return;}
+  const stale=sc.age_sec>150;
+  const ox=ok=>'<span class="'+(ok?"up":"down")+'">'+(ok?"O":"X")+"</span>";
+  const rows=sc.coins.slice().sort((a,b)=>b.score-a.score).map(c=>{
+    const all=c.vol_ratio>=2&&c.bull&&c.above_ema;   // 기본 조건 3가지 모두 충족
+    const la=c.last_alert?new Date(c.last_alert).toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"-";
+    return "<tr><td><b>"+esc(c.symbol.split("/")[0])+"</b>"+(c.is_main?" <span class='vals'>(매매)</span>":"")+"</td><td>"+fmtP(c.price)+
+      "</td><td><b>"+c.score+"</b></td><td>"+c.vol_ratio.toFixed(1)+"배 "+ox(c.vol_ratio>=2)+"</td><td>"+ox(c.bull)+"</td><td>"+ox(c.above_ema)+
+      "</td><td>"+c.aligned_count+"/"+c.tf_total+"</td><td>"+(all?"<b class='up'>조건 충족</b>":"-")+"</td><td>"+esc(la)+"</td></tr>";
+  }).join("");
+  $("scan").innerHTML=(stale?'<div class="meta warn" style="padding:4px 10px">마지막 갱신 '+sc.age_sec+"초 전 — 봇이 멈춘 것 같습니다</div>":"")+
+    "<table><thead><tr><th>코인</th><th>현재가</th><th>점수</th><th>거래량</th><th>양봉</th><th>EMA</th><th>정배열</th><th>상태</th><th>마지막 알림</th></tr></thead><tbody>"+rows+"</tbody></table>";
+}
+function renderScore(b){
+  const s=b&&b.score;
+  if(!s){$("score").innerHTML='<div class="empty">봇이 점수를 기록하면 표시됩니다.</div>';return;}
+  const groups={};s.items.forEach(i=>{(groups[i.group]=groups[i.group]||[]).push(i);});
+  let h='<div class="hero"><span class="price">'+s.total+'</span><span class="chg">/ 100점</span></div>'+
+    '<div class="bar big"><i style="width:'+s.total+'%"></i></div>';
+  Object.keys(groups).forEach(g=>{
+    const it=groups[g],got=it.reduce((a,x)=>a+x.score,0),mx=it.reduce((a,x)=>a+x.max,0);
+    h+='<div class="sgrp"><b>'+esc(g)+'</b><span class="vals">'+got.toFixed(1)+" / "+mx+"</span></div>"+
+      it.map(x=>'<div class="srow"><span>'+esc(x.name)+'</span><div class="bar"><i style="width:'+(x.max?x.score/x.max*100:0)+
+      '%"></i></div><span class="vals">'+x.score+" / "+x.max+" · "+esc(x.detail)+"</span></div>").join("");
+  });
+  $("score").innerHTML=h;
+}
+const TFN={"1M":"월봉","1w":"주봉","1d":"일봉","4h":"4시간봉","1h":"1시간봉","15m":"15분봉"};
+function renderAlign(b){
+  const a=b&&b.ema_align;
+  if(!a){$("align").innerHTML='<div class="empty">봇이 이평선 배열을 기록하면 표시됩니다.</div>';return;}
+  $("align").innerHTML=Object.keys(TFN).filter(k=>a[k]).map(k=>{
+    const x=a[k],c=x.state==="정배열"?"bull":(x.state==="역배열"?"bear":"");
+    const vals=x.values.length?x.lengths.map((n,i)=>"EMA"+n+" "+num(x.values[i],0)).join("  ›  "):"";
+    let vol="";
+    if(x.vol_streak!=null){
+      vol='<span class="chip '+(x.vol_streak>0?"ok":"")+'">거래량 연속↑ '+x.vol_streak+"회</span>"+
+        (x.vol_change!=null?'<span class="vals">직전봉 '+pct(x.vol_change,0)+"</span>":"");
+    }
+    return '<div class="arow"><b>'+TFN[k]+'</b><span class="chip '+c+'">'+esc(x.state)+"</span>"+vol+'<span class="vals">'+esc(vals)+"</span></div>";
+  }).join("");
+}
+function renderAlerts(a){
+  $("alerts").innerHTML=a.length?a.map(x=>{
+    const t=new Date(x.time).toLocaleString("ko-KR");
+    const bad=x.tg==="fail"||x.tg==="unset";   // tg 값이 없는 예전 기록은 표시하지 않음
+    const tag=bad?'<span class="nosend">텔레그램 미전송'+(x.tg==="unset"?" (환경변수 미설정)":" (전송 실패)")+"</span>":"";
+    return "<li><time>"+esc(t)+tag+"</time>"+esc(x.text)+"</li>";}).join(""):'<li class="empty">아직 알림이 없습니다.</li>';
+}
+function renderTgWarn(b){
+  const t=b&&b.telegram,p=b&&b.publish,el=$("tgwarn");let h="";
+  if(t&&(!t.configured||t.last_error)){
+    h+='<div class="tgwarn"><b>텔레그램 알림이 가지 않고 있습니다.</b><small>'+esc(t.last_error||"환경변수가 설정되지 않았습니다")+
+      "</small><small>봇을 실행한 PowerShell 창의 메시지도 함께 확인하세요.</small></div>";
+  }
+  if(p&&p.enabled&&p.last_error){
+    h+='<div class="tgwarn"><b>GitHub 고객용 페이지 업데이트에 실패했습니다.</b><small>'+esc(p.last_error)+"</small></div>";
+  }
+  el.innerHTML=h;
+}
+function curveSvg(c){
+  if(!c||!c.length)return '<div class="empty">마감된 사이클이 생기면 표시됩니다.</div>';
+  const w=640,h=170,pad=28,ys=[0].concat(c);let lo=Math.min(...ys),hi=Math.max(...ys);if(hi===lo)hi=lo+1;
+  const X=i=>pad+(w-2*pad)*i/Math.max(ys.length-1,1),Y=v=>h-pad-(h-2*pad)*(v-lo)/(hi-lo);
+  const pts=ys.map((v,i)=>X(i).toFixed(1)+","+Y(v).toFixed(1)).join(" ");
+  return '<svg viewBox="0 0 '+w+" "+h+'"><line class="zero" x1="'+pad+'" x2="'+(w-pad)+'" y1="'+Y(0)+'" y2="'+Y(0)+
+    '"/><polyline class="line" points="'+pts+'"/><text x="'+pad+'" y="14">최고 '+pct(hi)+'</text><text x="'+pad+'" y="'+(h-6)+
+    '">최저 '+pct(lo)+'</text><text x="'+(w-pad)+'" y="14" text-anchor="end">현재 '+pct(ys[ys.length-1])+"</text></svg>";
+}
+function renderBoard(L){
+  const s=L.summary;
+  if(!s||!s.n){$("tiles").innerHTML="";$("curve").innerHTML=curveSvg([]);
+    $("board").innerHTML='<div class="empty">아직 마감된 사이클이 없습니다.</div>';}
+  else{
+    const T=[["총 실현손익",pct(s.total),cls(s.total)],["승률",s.win_rate.toFixed(0)+"%",""],["마감 사이클",s.n+"건",""],
+      ["손절",s.sl_count+"건",""],["평균 손익",pct(s.avg),cls(s.avg)],["손익비(PF)",s.pf==null?"-":s.pf.toFixed(2),""],
+      ["최대 낙폭","-"+s.mdd.toFixed(2)+"%",s.mdd?"down":""],["평균 보유",s.avg_hours.toFixed(0)+"시간",""]];
+    $("tiles").innerHTML=T.map(t=>'<div class="tile"><b class="'+t[2]+'">'+esc(t[1])+"</b><span>"+esc(t[0])+"</span></div>").join("");
+    $("curve").innerHTML=curveSvg(s.curve);
+    $("board").innerHTML="<table><thead><tr><th>순위</th><th>시작(UTC)</th><th>도달 차수</th><th>결과</th><th>실현손익</th><th>투입 대비</th><th>보유</th></tr></thead><tbody>"+
+      L.ranked.map((c,i)=>"<tr><td class='rank'>"+(i+1)+"</td><td>"+esc(c.start)+"</td><td>"+c.max_stage+"/5</td><td>"+esc(c.outcome)+
+      "</td><td class='"+cls(c.pnl)+"'>"+pct(c.pnl)+"</td><td class='"+cls(c.ret)+"'>"+pct(c.ret)+"</td><td>"+Math.round(c.hours)+"h</td></tr>").join("")+
+      "</tbody></table>";
+  }
+  $("open").innerHTML=L.open.length?"<table><thead><tr><th>시작(UTC)</th><th>현재 차수</th><th>익절</th><th>지금까지 실현손익</th></tr></thead><tbody>"+
+    L.open.map(c=>"<tr><td>"+esc(c.start)+"</td><td>"+c.max_stage+"/5</td><td>"+c.tp_count+"회</td><td class='"+cls(c.pnl)+"'>"+pct(c.pnl)+"</td></tr>").join("")+
+    "</tbody></table>":'<div class="empty">진행 중인 사이클이 없습니다.</div>';
+}
+// 매수 시그널 종목: 검출 후 hold_hours 시간 동안 표시, 최소 점수 이상만. 최소 점수는 이 브라우저에만 기억(localStorage)
+let minScoreSetting=60,lastData=null;
+try{const v=localStorage.getItem("minScore");if(v!==null&&v!==""&&!isNaN(+v))minScoreSetting=+v;}catch(e){}
+$("minScore").value=minScoreSetting;
+$("minScore").addEventListener("change",e=>{
+  const v=Math.min(100,Math.max(0,Number(e.target.value)||0));minScoreSetting=v;e.target.value=v;
+  try{localStorage.setItem("minScore",String(v));}catch(err){}
+  if(lastData)renderSignals(lastData);
+});
+function fmtDur(h){
+  const m=Math.max(Math.round(h*60),0),hh=Math.floor(m/60),mm=m%60;
+  return hh>0?hh+"시간 "+mm+"분":mm+"분";
+}
+function renderSignals(d){
+  const hold=d.hold_hours||8,all=d.signals||[],now=Date.now();
+  const minScore=(PUBLIC&&d.min_score!=null)?d.min_score:minScoreSetting;   // 공개 화면은 서버가 정한 기준을 사용
+  const pass=all.filter(s=>s.score>=minScore&&(now-new Date(s.time))/3600000<=hold),hidden=all.length-pass.length;   // 스냅샷 페이지에서도 8시간이 지나면 빠지도록 브라우저에서도 확인
+  const latest={};   // 종목별로 가장 최근 시그널 하나만
+  pass.forEach(s=>{if(!latest[s.symbol]||new Date(s.time)>new Date(latest[s.symbol].time))latest[s.symbol]=s;});
+  const priceOf={};((d.scan&&d.scan.coins)||[]).forEach(c=>{priceOf[c.symbol]=c.price;});
+  const rows=Object.values(latest).sort((a,b)=>new Date(b.time)-new Date(a.time)).map(s=>{
+    const t=new Date(s.time),el=(now-t)/3600000,cur=priceOf[s.symbol],chg=(cur!=null&&s.price)?(cur/s.price-1)*100:null;
+    const when=t.toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+    return "<tr><td><b>"+esc(s.symbol.split("/")[0])+"</b>"+(s.kind==="main"&&s.stage?" <span class='vals'>("+s.stage+"차 진입)</span>":"")+
+      "</td><td>"+esc(when)+"</td><td>"+fmtDur(el)+" 전</td><td>"+fmtDur(Math.max(hold-el,0))+"</td><td>"+fmtP(s.price)+
+      "</td><td>"+fmtP(cur)+"</td><td class='"+cls(chg)+"'>"+pct(chg)+"</td><td><b>"+s.score+"</b></td></tr>";
+  }).join("");
+  $("sigmeta").textContent="검출 후 "+hold+"시간 동안 표시 · 점수 "+minScore+"점 이상"+(PUBLIC?"":" · 기준 미달로 숨긴 시그널 "+hidden+"건");
+  $("sigs").innerHTML=rows?"<table><thead><tr><th>종목</th><th>검출 시각</th><th>경과</th><th>표시 남은 시간</th><th>시그널 가격</th><th>현재가</th><th>시그널 후</th><th>점수</th></tr></thead><tbody>"+rows+"</tbody></table>":
+    '<div class="empty">최근 '+hold+'시간 안에 '+minScore+'점 이상인 매수 시그널이 없습니다.</div>';
+}
+// 스냅샷(GitHub Pages) 페이지: 시그널/리더보드는 업데이트 시점 기준이고, 가격은 브라우저가 거래소에서 직접 가져와 실시간으로 보여줌.
+// 가져오기에 실패하면(차단·네트워크 등) 업데이트 시점의 가격을 그대로 보여줌.
+let liveOk=false;
+async function liveUpdate(){
+  const d=STATIC_DATA;
+  if(!d||d.exchange!=="binance"){liveOk=false;return;}
+  const ac=new AbortController(),to=setTimeout(()=>ac.abort(),4000);
+  try{
+    const main=d.symbol||"BTC/USDT";
+    const names=[...new Set([main].concat((d.signals||[]).map(s=>s.symbol)))];
+    const q=encodeURIComponent(JSON.stringify(names.map(n=>n.replace("/",""))));
+    const r=await fetch("https://api.binance.com/api/v3/ticker/24hr?symbols="+q,{signal:ac.signal,cache:"no-store"});
+    if(!r.ok)throw new Error("http "+r.status);
+    const m={};(await r.json()).forEach(x=>{m[x.symbol]=x;});
+    const k=m[main.replace("/","")];
+    if(k)d.price={price:+k.lastPrice,pct24:+k.priceChangePercent,high:+k.highPrice,low:+k.lowPrice,error:null};
+    d.scan={coins:names.filter(n=>m[n.replace("/","")]).map(n=>({symbol:n,price:+m[n.replace("/","")].lastPrice}))};
+    liveOk=!!k;
+  }catch(e){liveOk=false;}
+  finally{clearTimeout(to);}
+}
+async function load(){
+  try{
+    if(STATIC_DATA)await liveUpdate();
+    const d=STATIC_DATA||await (await fetch(API,{cache:"no-store"})).json();lastData=d;
+    if(STATIC_DATA){
+      const g=new Date(d.generated),when=g.toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+      $("sub").textContent=d.exchange+" 기준 · 마지막 업데이트 "+when+(liveOk?" · 가격은 실시간":" · 가격은 업데이트 시점 기준");
+    }else $("sub").textContent=PUBLIC?(d.exchange+" 기준 · "+(REFRESH_MS/1000)+"초마다 자동 갱신")
+      :(d.symbol+" · "+d.exchange+" · "+(REFRESH_MS/1000)+"초마다 자동 갱신");
+    renderPrice(d.price);renderSignals(d);renderBoard(d.leaderboard);
+    if(!PUBLIC){renderTgWarn(d.bot);renderScore(d.bot);renderBot(d.bot);renderScan(d.scan);renderAlign(d.bot);renderAlerts(d.alerts);}
+  }catch(e){$("sub").textContent=PUBLIC?"데이터를 불러오지 못했습니다. 잠시 후 다시 시도됩니다.":"대시보드 서버에 연결할 수 없습니다 (dashboard.py가 실행 중인지 확인)";}
+}
+load();setInterval(load,REFRESH_MS);
+</script></body></html>
