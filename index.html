@@ -61,10 +61,10 @@ svg .line{fill:none;stroke:var(--accent);stroke-width:2}svg text{fill:var(--mute
 <div class="card"><div class="hero"><span class="price" id="price">-</span><span class="chg" id="chg"></span></div>
 <div class="meta" id="hl"></div></div>
 
-<div class="private"><div id="tgwarn"></div>
+<div class="private"><div id="tgwarn"></div></div>
 <h2>종합 점수 (100점 만점)</h2><div class="card" id="score"><div class="empty">불러오는 중…</div></div>
 <h2>봇 상태</h2><div class="card" id="bot"><div class="empty">불러오는 중…</div></div>
-<h2>코인 스캔 (점수 높은 순)</h2><div class="card tbl" id="scan"><div class="empty">불러오는 중…</div></div>
+<div class="private"><h2>코인 스캔 (점수 높은 순)</h2><div class="card tbl" id="scan"><div class="empty">불러오는 중…</div></div>
 <h2>이평선 배열 (EMA) · 거래량 연속 상승</h2><div class="card" id="align"><div class="empty">불러오는 중…</div></div></div>
 <div class="sighead"><h2>매수 시그널 종목</h2>
 <label class="ctl private">최소 점수 <input id="minScore" type="number" min="0" max="100" step="5" value="60"> 점 이상</label></div>
@@ -78,7 +78,7 @@ svg .line{fill:none;stroke:var(--accent);stroke-width:2}svg text{fill:var(--mute
 <p class="foot pubonly">본 페이지는 참고용 정보이며 투자 권유가 아닙니다. 표시된 성과는 시그널이 발생한 시점의 가격을 기준으로 계산한 가상 결과로, 수수료·슬리피지·실제 체결 차이가 반영되어 있지 않습니다. 과거 성과가 미래 수익을 보장하지 않으며, 투자 판단과 그에 따른 결과의 책임은 본인에게 있습니다.</p>
 </main>
 <script>
-const API="/api/public",PUBLIC=true,REFRESH_MS=10000,STATIC_DATA={"generated": "2026-11-10T11:02:58.340388+00:00", "symbol": "BTC/USDT", "exchange": "binance", "price": {"price": 74210.85, "pct24": 0.044, "high": 75568.18, "low": 74058.7, "volume": 894530259.1706666, "error": null}, "hold_hours": 8, "min_score": 60, "signals": [], "scan": {"coins": []}, "leaderboard": {"summary": {"n": 0, "win_rate": 0.0, "total": 0, "avg": 0.0, "avg_win": 0.0, "avg_loss": 0.0, "pf": null, "best": 0.0, "worst": 0.0, "mdd": 0.0, "sl_count": 0, "avg_hours": 0.0, "curve": []}, "ranked": [], "stages": [], "open": []}};   // STATIC_DATA: 서버 없는 스냅샷 페이지일 때만 값이 있음
+const API="/api/public",PUBLIC=true,REFRESH_MS=10000,STATIC_DATA={"generated": "2026-11-10T11:16:36.847924+00:00", "symbol": "BTC/USDT", "exchange": "binance", "price": {"price": 74396.68, "pct24": 0.358, "high": 75568.18, "low": 74115.65, "volume": 900199484.2787586, "error": null}, "hold_hours": 8, "min_score": 60, "signals": [], "bot": {"time": "2026-11-10T11:16:31.877433+00:00", "age_sec": 8, "symbol": "BTC/USDT", "timeframe": "15m", "vol_ratio": 1.38, "vol_mult": 2.0, "bull": true, "above_ema": false, "ema_len": 50, "score": {"total": 30, "items": [{"group": "기본 조건", "name": "거래량 배수", "score": 8.3, "max": 12, "detail": "1.4배 (기준 2배)", "tone": "up"}, {"group": "기본 조건", "name": "양봉", "score": 8, "max": 8, "detail": "양봉", "tone": "up"}, {"group": "기본 조건", "name": "EMA50 위", "score": 0, "max": 10, "detail": "아래", "tone": "down"}, {"group": "이평선 배열", "name": "월봉", "score": 4.0, "max": 8, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "주봉", "score": 4.0, "max": 8, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "일봉", "score": 4.5, "max": 9, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "4시간봉", "score": 0.0, "max": 8, "detail": "역배열", "tone": "down"}, {"group": "이평선 배열", "name": "1시간봉", "score": 0.0, "max": 6, "detail": "역배열", "tone": "down"}, {"group": "이평선 배열", "name": "15분봉", "score": 0.0, "max": 6, "detail": "역배열", "tone": "down"}, {"group": "거래량 연속상승", "name": "1시간봉", "score": 0.0, "max": 7, "detail": "0회", "tone": null}, {"group": "거래량 연속상승", "name": "4시간봉", "score": 0.0, "max": 7, "detail": "0회", "tone": null}, {"group": "거래량 연속상승", "name": "일봉", "score": 4.0, "max": 6, "detail": "2회", "tone": "up"}, {"group": "거래량 연속상승", "name": "주봉", "score": 2.0, "max": 3, "detail": "2회", "tone": "down"}, {"group": "거래량 연속상승", "name": "월봉", "score": 0.0, "max": 2, "detail": "0회", "tone": null}, {"group": "추세 필터", "name": "상위 추세(1h·4h)", "score": -5, "max": 5, "detail": "역행", "tone": "down"}]}, "m5": {"trend": "down", "fast": 74286.0, "slow": 74342.12, "vwap": 74730.58, "price": 74367.0, "above_vwap": false, "vol_ratio": 2.6, "vol_ok": true}, "m5_enabled": false, "m5_fast": 9, "m5_slow": 21, "stage": 1, "stages": 5, "tp_done": 0, "avg_price": 74911.99, "pnl_pct": -0.6878872127145663, "sl_price": null}, "scan": {"coins": []}, "leaderboard": {"summary": {"n": 0, "win_rate": 0.0, "total": 0, "avg": 0.0, "avg_win": 0.0, "avg_loss": 0.0, "pf": null, "best": 0.0, "worst": 0.0, "mdd": 0.0, "sl_count": 0, "avg_hours": 0.0, "curve": []}, "ranked": [], "stages": [], "open": []}};   // STATIC_DATA: 서버 없는 스냅샷 페이지일 때만 값이 있음
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cls=v=>v>0?"up":(v<0?"down":"");
@@ -106,9 +106,10 @@ function m5Row(b){   // 5분봉 EMA9/21 추세 + VWAP 위/아래 (참고 표시)
     (b.m5_enabled?"":" · 참고용(진입 조건 미적용)")+"</span></div>";
 }
 function renderBot(b){
-  if(!b){$("bot").innerHTML='<div class="empty">봇이 아직 상태를 기록하지 않았습니다. btc_alert_bot.py가 실행 중인지 확인하세요.</div>';return;}
-  const stale=b.age_sec>90;
-  let h='<div class="meta '+(stale?"warn":"")+'">마지막 갱신 '+b.age_sec+"초 전"+(stale?" — 봇이 멈춘 것 같습니다":"")+
+  if(!b){$("bot").innerHTML='<div class="empty">'+(PUBLIC?"상태 정보를 준비 중입니다.":"봇이 아직 상태를 기록하지 않았습니다. btc_alert_bot.py가 실행 중인지 확인하세요.")+"</div>";return;}
+  const snap=!!STATIC_DATA,stale=!snap&&!PUBLIC&&b.age_sec>90;
+  const upd=snap?"업데이트 시점 "+new Date(b.time).toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"마지막 갱신 "+b.age_sec+"초 전";
+  let h='<div class="meta '+(stale?"warn":"")+'">'+upd+(stale?" — 봇이 멈춘 것 같습니다":"")+
     " · "+esc(b.symbol)+" "+esc(b.timeframe)+" 직전 마감봉 기준</div><div class='row'>"+
     chipDir("거래량 "+b.vol_ratio+"배 (기준 "+b.vol_mult+"배)",b.vol_ratio>=b.vol_mult,b.bull)+
     chip("양봉",b.bull)+chip("EMA"+b.ema_len+" 위",b.above_ema)+"</div>"+m5Row(b);
@@ -139,7 +140,7 @@ const TONE_BY_TEXT={"정배열":"up","역배열":"down","혼조":"mix","순행":
 function scoreTone(x){return x.tone||TONE_BY_TEXT[x.detail]||null;}   // 봇이 준 색상 정보가 없으면 상태 글자로 판단
 function renderScore(b){
   const s=b&&b.score;
-  if(!s){$("score").innerHTML='<div class="empty">봇이 점수를 기록하면 표시됩니다.</div>';return;}
+  if(!s){$("score").innerHTML='<div class="empty">'+(PUBLIC?"점수 정보를 준비 중입니다.":"봇이 점수를 기록하면 표시됩니다.")+"</div>";return;}
   const groups={};s.items.forEach(i=>{(groups[i.group]=groups[i.group]||[]).push(i);});
   let h='<div class="hero"><span class="price">'+s.total+'</span><span class="chg">/ 100점</span></div>'+
     '<div class="bar big"><i style="width:'+s.total+'%"></i></div>';
@@ -275,7 +276,8 @@ async function load(){
     }else $("sub").textContent=PUBLIC?(d.exchange+" 기준 · "+(REFRESH_MS/1000)+"초마다 자동 갱신")
       :(d.symbol+" · "+d.exchange+" · "+(REFRESH_MS/1000)+"초마다 자동 갱신");
     renderPrice(d.price);renderSignals(d);renderBoard(d.leaderboard);
-    if(!PUBLIC){renderTgWarn(d.bot);renderScore(d.bot);renderBot(d.bot);renderScan(d.scan);renderAlign(d.bot);renderAlerts(d.alerts);}
+    renderScore(d.bot);renderBot(d.bot);
+    if(!PUBLIC){renderTgWarn(d.bot);renderScan(d.scan);renderAlign(d.bot);renderAlerts(d.alerts);}
   }catch(e){$("sub").textContent=PUBLIC?"데이터를 불러오지 못했습니다. 잠시 후 다시 시도됩니다.":"대시보드 서버에 연결할 수 없습니다 (dashboard.py가 실행 중인지 확인)";}
 }
 load();setInterval(load,REFRESH_MS);
