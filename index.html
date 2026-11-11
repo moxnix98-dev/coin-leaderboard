@@ -1,5 +1,5 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>비트 시그널 현황</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>BTC · ETH 시그널 현황</title>
 <style>
 :root{--bg:#fafaf9;--card:#fff;--ink:#1c1917;--mute:#78716c;--line:#e7e5e4;--up:#0f766e;--down:#b91c1c;
 --accent:#1d4ed8;--chip:#f5f5f4;--warn:#b45309;--tvup:#089981;--tvdn:#f23645;--tvmix:#ff9800}
@@ -24,6 +24,9 @@ h1{font-size:20px;margin:0}h2{font-size:15px;margin:26px 0 10px}
 .chip.bear,.chip.vdn{border-color:var(--tvdn);color:var(--tvdn)}
 .chip.mix{border-color:var(--tvmix);color:var(--tvmix)}
 .tvup{color:var(--tvup)}.tvdn{color:var(--tvdn)}.tvmix{color:var(--tvmix)}
+.cmpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.cmpgrid .card{margin:0}.cmpgrid .price{font-size:30px}.cmpgrid .coin{font-weight:700;font-size:15px;margin-bottom:2px}
+.cmptable th:first-child,.cmptable td:first-child{text-align:left}
 .bar i.tup{background:var(--tvup)}.bar i.tdn{background:var(--tvdn)}.bar i.tmix{background:var(--tvmix)}
 .bar{height:6px;background:var(--chip);border-radius:99px;overflow:hidden;min-width:60px}
 .bar i{display:block;height:100%;background:var(--accent)}.bar.big{height:10px;margin:8px 0 2px}
@@ -57,13 +60,13 @@ body.public .private{display:none}body:not(.public) .pubonly{display:none}
 svg{width:100%;height:auto;display:block}svg .zero{stroke:var(--line);stroke-dasharray:4 4}
 svg .line{fill:none;stroke:var(--accent);stroke-width:2}svg text{fill:var(--mute);font-size:11px}
 </style></head><body class="public"><main>
-<h1>비트 시그널 현황</h1><p class="sub" id="sub">불러오는 중…</p>
-<div class="card"><div class="hero"><span class="price" id="price">-</span><span class="chg" id="chg"></span></div>
-<div class="meta" id="hl"></div></div>
+<h1>BTC · ETH 시그널 현황</h1><p class="sub" id="sub">불러오는 중…</p>
+<div class="cmpgrid" id="cmpcards"></div>
+<h2>비교</h2><div class="card tbl" id="cmptable"><div class="empty">불러오는 중…</div></div>
 
 <div class="private"><div id="tgwarn"></div></div>
-<h2>종합 점수 (100점 만점)</h2><div class="card" id="score"><div class="empty">불러오는 중…</div></div>
-<h2>봇 상태</h2><div class="card" id="bot"><div class="empty">불러오는 중…</div></div>
+<h2>비트코인 종합 점수 (100점 만점)</h2><div class="card" id="score"><div class="empty">불러오는 중…</div></div>
+<h2>비트코인 봇 상태</h2><div class="card" id="bot"><div class="empty">불러오는 중…</div></div>
 <h2>코인 스캔 (점수 높은 순)</h2><div class="card tbl" id="scan"><div class="empty">불러오는 중…</div></div>
 <div class="private"><h2>이평선 배열 (EMA) · 거래량 연속 상승</h2><div class="card" id="align"><div class="empty">불러오는 중…</div></div></div>
 <div class="sighead"><h2>매수 시그널 종목</h2>
@@ -78,7 +81,7 @@ svg .line{fill:none;stroke:var(--accent);stroke-width:2}svg text{fill:var(--mute
 <p class="foot pubonly">본 페이지는 참고용 정보이며 투자 권유가 아닙니다. 표시된 성과는 시그널이 발생한 시점의 가격을 기준으로 계산한 가상 결과로, 수수료·슬리피지·실제 체결 차이가 반영되어 있지 않습니다. 과거 성과가 미래 수익을 보장하지 않으며, 투자 판단과 그에 따른 결과의 책임은 본인에게 있습니다.</p>
 </main>
 <script>
-const API="/api/public",PUBLIC=true,REFRESH_MS=10000,STATIC_DATA={"generated": "2026-11-11T06:28:53.809050+00:00", "symbol": "BTC/USDT", "exchange": "binance", "price": {"price": 73819.49, "pct24": -1.173, "high": 74996.01, "low": 72727.27, "volume": 1344045302.5561233, "error": null}, "hold_hours": 8, "min_score": 60, "signals": [], "bot": {"time": "2026-11-11T06:28:48.916647+00:00", "age_sec": 8, "symbol": "BTC/USDT", "timeframe": "15m", "vol_ratio": 2.73, "vol_mult": 2.0, "bull": false, "above_ema": true, "ema_len": 50, "score": {"total": 43, "items": [{"group": "기본 조건", "name": "거래량 배수", "score": 12.0, "max": 12, "detail": "2.7배 (기준 2배)", "tone": "down"}, {"group": "기본 조건", "name": "양봉", "score": 0, "max": 8, "detail": "음봉", "tone": "down"}, {"group": "기본 조건", "name": "EMA50 위", "score": 10, "max": 10, "detail": "위", "tone": "up"}, {"group": "이평선 배열", "name": "월봉", "score": 4.0, "max": 8, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "주봉", "score": 4.0, "max": 8, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "일봉", "score": 4.5, "max": 9, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "4시간봉", "score": 0.0, "max": 8, "detail": "역배열", "tone": "down"}, {"group": "이평선 배열", "name": "1시간봉", "score": 0.0, "max": 6, "detail": "역배열", "tone": "down"}, {"group": "이평선 배열", "name": "15분봉", "score": 3.0, "max": 6, "detail": "혼조", "tone": "mix"}, {"group": "거래량 연속상승", "name": "1시간봉", "score": 0.0, "max": 7, "detail": "0회", "tone": null}, {"group": "거래량 연속상승", "name": "4시간봉", "score": 2.3, "max": 7, "detail": "1회", "tone": "down"}, {"group": "거래량 연속상승", "name": "일봉", "score": 6.0, "max": 6, "detail": "3회", "tone": "down"}, {"group": "거래량 연속상승", "name": "주봉", "score": 2.0, "max": 3, "detail": "2회", "tone": "down"}, {"group": "거래량 연속상승", "name": "월봉", "score": 0.0, "max": 2, "detail": "0회", "tone": null}, {"group": "추세 필터", "name": "상위 추세(1h·4h)", "score": -5, "max": 5, "detail": "역행", "tone": "down"}]}, "m5": {"trend": "up", "fast": 73855.48, "slow": 73830.52, "vwap": 73705.25, "price": 73813.9, "above_vwap": true, "vol_ratio": 1.4, "vol_ok": false}, "m5_enabled": false, "m5_fast": 9, "m5_slow": 21, "stage": 1, "stages": 5, "tp_done": 0, "avg_price": 74911.99, "pnl_pct": -1.458364675668078, "sl_price": null}, "scan": {"coins": [{"symbol": "BTC/USDT", "price": 73819.5, "score": 43, "vol_ratio": 2.73, "bull": false, "above_ema": true, "aligned_count": 0, "tf_total": 6, "last_alert": null}, {"symbol": "ETH/USDT", "price": 2064.88, "score": 29, "vol_ratio": 0.75, "bull": false, "above_ema": true, "aligned_count": 0, "tf_total": 6, "last_alert": null}, {"symbol": "SOL/USDT", "price": 83.07, "score": 16, "vol_ratio": 0.78, "bull": false, "above_ema": false, "aligned_count": 0, "tf_total": 6, "last_alert": null}, {"symbol": "XRP/USDT", "price": 1.059, "score": 27, "vol_ratio": 0.85, "bull": false, "above_ema": true, "aligned_count": 0, "tf_total": 6, "last_alert": null}, {"symbol": "DOGE/USDT", "price": 0.06805, "score": 5, "vol_ratio": 1.05, "bull": false, "above_ema": false, "aligned_count": 0, "tf_total": 6, "last_alert": null}, {"symbol": "ADA/USDT", "price": 0.175, "score": 20, "vol_ratio": 3.47, "bull": false, "above_ema": true, "aligned_count": 0, "tf_total": 6, "last_alert": null}]}, "leaderboard": {"summary": {"n": 0, "win_rate": 0.0, "total": 0, "avg": 0.0, "avg_win": 0.0, "avg_loss": 0.0, "pf": null, "best": 0.0, "worst": 0.0, "mdd": 0.0, "sl_count": 0, "avg_hours": 0.0, "curve": []}, "ranked": [], "stages": [], "open": []}};   // STATIC_DATA: 서버 없는 스냅샷 페이지일 때만 값이 있음
+const API="/api/public",PUBLIC=true,REFRESH_MS=10000,STATIC_DATA={"generated": "2026-11-11T06:44:15.054199+00:00", "symbol": "BTC/USDT", "exchange": "binance", "price": {"price": 73674.17, "pct24": -1.397, "high": 74996.01, "low": 72727.27, "volume": 1367957700.3000684, "error": null}, "prices": {"BTC/USDT": {"price": 73674.17, "pct24": -1.397, "high": 74996.01, "low": 72727.27, "volume": 1367957700.3000684, "error": null}, "ETH/USDT": {"price": 2058.52, "pct24": -2.808, "high": 2125.22, "low": 2006.0, "volume": 711486104.699103, "error": null}}, "hold_hours": 8, "min_score": 60, "signals": [], "bot": {"time": "2026-11-11T06:44:10.190328+00:00", "age_sec": 7, "symbol": "BTC/USDT", "timeframe": "15m", "vol_ratio": 0.97, "vol_mult": 2.0, "bull": false, "above_ema": true, "ema_len": 50, "score": {"total": 37, "items": [{"group": "기본 조건", "name": "거래량 배수", "score": 5.8, "max": 12, "detail": "1.0배 (기준 2배)", "tone": "down"}, {"group": "기본 조건", "name": "양봉", "score": 0, "max": 8, "detail": "음봉", "tone": "down"}, {"group": "기본 조건", "name": "EMA50 위", "score": 10, "max": 10, "detail": "위", "tone": "up"}, {"group": "이평선 배열", "name": "월봉", "score": 4.0, "max": 8, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "주봉", "score": 4.0, "max": 8, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "일봉", "score": 4.5, "max": 9, "detail": "혼조", "tone": "mix"}, {"group": "이평선 배열", "name": "4시간봉", "score": 0.0, "max": 8, "detail": "역배열", "tone": "down"}, {"group": "이평선 배열", "name": "1시간봉", "score": 0.0, "max": 6, "detail": "역배열", "tone": "down"}, {"group": "이평선 배열", "name": "15분봉", "score": 3.0, "max": 6, "detail": "혼조", "tone": "mix"}, {"group": "거래량 연속상승", "name": "1시간봉", "score": 0.0, "max": 7, "detail": "0회", "tone": null}, {"group": "거래량 연속상승", "name": "4시간봉", "score": 2.3, "max": 7, "detail": "1회", "tone": "down"}, {"group": "거래량 연속상승", "name": "일봉", "score": 6.0, "max": 6, "detail": "3회", "tone": "down"}, {"group": "거래량 연속상승", "name": "주봉", "score": 2.0, "max": 3, "detail": "2회", "tone": "down"}, {"group": "거래량 연속상승", "name": "월봉", "score": 0.0, "max": 2, "detail": "0회", "tone": null}, {"group": "추세 필터", "name": "상위 추세(1h·4h)", "score": -5, "max": 5, "detail": "역행", "tone": "down"}]}, "m5": {"trend": "up", "fast": 73845.31, "slow": 73831.09, "vwap": 73715.27, "price": 73854.01, "above_vwap": true, "vol_ratio": 2.77, "vol_ok": true}, "m5_enabled": false, "m5_fast": 9, "m5_slow": 21, "stage": 1, "stages": 5, "tp_done": 0, "avg_price": 74911.99, "pnl_pct": -1.6523523136950602, "sl_price": null}, "scan": {"coins": [{"symbol": "BTC/USDT", "price": 73674.18, "score": 37, "vol_ratio": 0.97, "bull": false, "above_ema": true, "aligned_count": 0, "tf_total": 6, "last_alert": null, "align": {"1M": "혼조", "1w": "혼조", "1d": "혼조", "4h": "역배열", "1h": "역배열", "15m": "혼조"}}, {"symbol": "ETH/USDT", "price": 2058.43, "score": 29, "vol_ratio": 0.75, "bull": false, "above_ema": true, "aligned_count": 0, "tf_total": 6, "last_alert": null, "align": {"1M": "혼조", "1w": "역배열", "1d": "혼조", "4h": "역배열", "1h": "역배열", "15m": "혼조"}}, {"symbol": "SOL/USDT", "price": 82.75, "score": 15, "vol_ratio": 0.59, "bull": false, "above_ema": false, "aligned_count": 0, "tf_total": 6, "last_alert": null, "align": {"1M": "혼조", "1w": "역배열", "1d": "혼조", "4h": "역배열", "1h": "역배열", "15m": "역배열"}}, {"symbol": "XRP/USDT", "price": 1.056, "score": 17, "vol_ratio": 0.79, "bull": false, "above_ema": false, "aligned_count": 0, "tf_total": 6, "last_alert": null, "align": {"1M": "혼조", "1w": "역배열", "1d": "역배열", "4h": "역배열", "1h": "역배열", "15m": "혼조"}}, {"symbol": "DOGE/USDT", "price": 0.06779, "score": 1, "vol_ratio": 0.51, "bull": false, "above_ema": false, "aligned_count": 0, "tf_total": 6, "last_alert": null, "align": {"1M": "역배열", "1w": "역배열", "1d": "역배열", "4h": "역배열", "1h": "역배열", "15m": "역배열"}}, {"symbol": "ADA/USDT", "price": 0.1743, "score": 17, "vol_ratio": 2.06, "bull": false, "above_ema": true, "aligned_count": 0, "tf_total": 6, "last_alert": null, "align": {"1M": "역배열", "1w": "역배열", "1d": "역배열", "4h": "역배열", "1h": "역배열", "15m": "역배열"}}]}, "leaderboard": {"summary": {"n": 0, "win_rate": 0.0, "total": 0, "avg": 0.0, "avg_win": 0.0, "avg_loss": 0.0, "pf": null, "best": 0.0, "worst": 0.0, "mdd": 0.0, "sl_count": 0, "avg_hours": 0.0, "curve": []}, "ranked": [], "stages": [], "open": []}};   // STATIC_DATA: 서버 없는 스냅샷 페이지일 때만 값이 있음
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cls=v=>v>0?"up":(v<0?"down":"");
@@ -92,6 +95,36 @@ function renderPrice(p){
   lastPrice=p.price;
   $("chg").className="chg "+cls(p.pct24);$("chg").textContent="24h "+pct(p.pct24);
   $("hl").textContent="24h 고가 "+num(p.high)+" · 저가 "+num(p.low)+(p.error?" · 시세 갱신 실패(직전 값 표시)":"");
+}
+const lastPx={};
+function renderCompare(d){
+  const P=d.prices||(d.price?{[d.symbol||"BTC/USDT"]:d.price}:{});
+  const syms=Object.keys(P),base=s=>s.split("/")[0];
+  if(!syms.length){$("cmpcards").innerHTML="";$("cmptable").innerHTML='<div class="empty">시세를 불러오는 중입니다.</div>';return;}
+  $("cmpcards").innerHTML=syms.map(s=>{
+    const p=P[s]||{},prev=lastPx[s];let fl="";
+    if(p.price!=null){if(prev!=null&&p.price!==prev)fl=p.price>prev?" up":" down";lastPx[s]=p.price;}
+    return '<div class="card"><div class="coin">'+esc(base(s))+'</div><div class="hero"><span class="price'+fl+'">'+(p.price==null?"-":fmtP(p.price))+
+      '</span><span class="chg '+cls(p.pct24)+'">24h '+pct(p.pct24)+'</span></div><div class="meta">24h 고가 '+fmtP(p.high)+" · 저가 "+fmtP(p.low)+
+      (p.error?" · 시세 갱신 실패(직전 값 표시)":"")+"</div></div>";
+  }).join("");
+  const coins={};((d.scan&&d.scan.coins)||[]).forEach(c=>{coins[c.symbol]=c;});
+  const tone=x=>x==="정배열"?"tvup":(x==="역배열"?"tvdn":(x==="혼조"?"tvmix":""));
+  const row=(label,f)=>"<tr><td>"+label+"</td>"+syms.map(s=>"<td>"+(coins[s]?f(coins[s]):"-")+"</td>").join("")+"</tr>";
+  let rows=row("종합 점수",c=>"<b>"+c.score+"</b> / 100")+
+    row("거래량 배수 (15분봉)",c=>"<span class='"+(c.bull?"tvup":"tvdn")+"'>"+c.vol_ratio.toFixed(1)+"배</span>")+
+    row("직전 15분봉",c=>"<span class='"+(c.bull?"tvup":"tvdn")+"'>"+(c.bull?"양봉":"음봉")+"</span>")+
+    row("EMA50",c=>"<span class='"+(c.above_ema?"tvup":"tvdn")+"'>"+(c.above_ema?"위":"아래")+"</span>")+
+    row("정배열 개수",c=>c.aligned_count+" / "+c.tf_total);
+  Object.keys(TFN).forEach(k=>{rows+=row(TFN[k]+" 배열",c=>{const st=c.align&&c.align[k];return st?"<span class='"+tone(st)+"'>"+esc(st)+"</span>":"-";});});
+  let rel="";
+  if(syms.length===2&&P[syms[0]]&&P[syms[1]]&&P[syms[0]].price&&P[syms[1]].price){
+    const r=P[syms[1]].price/P[syms[0]].price,dp=(P[syms[1]].pct24!=null&&P[syms[0]].pct24!=null)?P[syms[1]].pct24-P[syms[0]].pct24:null;
+    rel='<div class="meta" style="padding:8px 10px">'+esc(base(syms[1]))+"/"+esc(base(syms[0]))+" 비율 "+r.toFixed(5)+
+      (dp==null?"":' · 24h 상대 성과 <span class="'+cls(dp)+'">'+pct(dp)+"p</span> ("+esc(base(syms[1]))+" − "+esc(base(syms[0]))+")")+"</div>";
+  }
+  $("cmptable").innerHTML=(coins[syms[0]]||coins[syms[1]]?"":'<div class="empty">봇이 코인 현황을 기록하면 표시됩니다.</div>')+
+    "<table class='cmptable'><thead><tr><th>항목</th>"+syms.map(s=>"<th>"+esc(base(s))+"</th>").join("")+"</tr></thead><tbody>"+rows+"</tbody></table>"+rel;
 }
 function chipDir(label,ok,bull){return '<span class="chip '+(bull?"vup":"vdn")+'">'+esc(label)+" "+(ok?"O":"X")+"</span>";}   // 거래량: 양봉이면 녹색, 음봉이면 빨강
 function chip(label,ok){return '<span class="chip '+(ok?"ok":"")+'">'+esc(label)+" "+(ok?"O":"X")+"</span>";}
@@ -257,13 +290,14 @@ async function liveUpdate(){
   try{
     const main=d.symbol||"BTC/USDT";
     const coins=(d.scan&&d.scan.coins)||[];
-    const names=[...new Set([main].concat(coins.map(c=>c.symbol),(d.signals||[]).map(s=>s.symbol)))];
+    const names=[...new Set([main].concat(Object.keys(d.prices||{}),coins.map(c=>c.symbol),(d.signals||[]).map(s=>s.symbol)))];
     const q=encodeURIComponent(JSON.stringify(names.map(n=>n.replace("/",""))));
     const r=await fetch("https://api.binance.com/api/v3/ticker/24hr?symbols="+q,{signal:ac.signal,cache:"no-store"});
     if(!r.ok)throw new Error("http "+r.status);
     const m={};(await r.json()).forEach(x=>{m[x.symbol]=x;});
     const k=m[main.replace("/","")];
     if(k)d.price={price:+k.lastPrice,pct24:+k.priceChangePercent,high:+k.highPrice,low:+k.lowPrice,error:null};
+    Object.keys(d.prices||{}).forEach(s=>{const x=m[s.replace("/","")];if(x)d.prices[s]={price:+x.lastPrice,pct24:+x.priceChangePercent,high:+x.highPrice,low:+x.lowPrice,error:null};});
     coins.forEach(c=>{const x=m[c.symbol.replace("/","")];if(x)c.price=+x.lastPrice;});   // 점수·거래량 등은 그대로 두고 가격만 실시간으로 교체
     d.scan={coins:coins};
     liveOk=!!k;
@@ -279,7 +313,7 @@ async function load(){
       $("sub").textContent=d.exchange+" 기준 · 마지막 업데이트 "+when+(liveOk?" · 가격은 실시간":" · 가격은 업데이트 시점 기준");
     }else $("sub").textContent=PUBLIC?(d.exchange+" 기준 · "+(REFRESH_MS/1000)+"초마다 자동 갱신")
       :(d.symbol+" · "+d.exchange+" · "+(REFRESH_MS/1000)+"초마다 자동 갱신");
-    renderPrice(d.price);renderSignals(d);renderBoard(d.leaderboard);
+    renderCompare(d);renderSignals(d);renderBoard(d.leaderboard);
     renderScore(d.bot);renderBot(d.bot);renderScan(d.scan);
     if(!PUBLIC){renderTgWarn(d.bot);renderAlign(d.bot);renderAlerts(d.alerts);}
   }catch(e){$("sub").textContent=PUBLIC?"데이터를 불러오지 못했습니다. 잠시 후 다시 시도됩니다.":"대시보드 서버에 연결할 수 없습니다 (dashboard.py가 실행 중인지 확인)";}
